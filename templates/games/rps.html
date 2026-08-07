@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+Rock Paper Scissors
+{% endblock %}
+
+{% block css %}
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/games/rps.css') }}"
+>
+{% endblock %}
+
+{% block body_class %}
+rps-page
+{% endblock %}
+
+{% block body %}
+
+<div class="rps-container">
+
+    <h1>Rock Paper Scissors</h1>
+
+    <div class="choices">
+
+        <button class="choice-button" onclick="playGame('rock')">
+            <img
+                src="{{ url_for('static', filename='assets/Rock.png') }}"
+                alt="Rock"
+            >
+            <span>Rock</span>
+        </button>
+
+        <button class="choice-button" onclick="playGame('paper')">
+            <img
+                src="{{ url_for('static', filename='assets/Paper.png') }}"
+                alt="Paper"
+            >
+            <span>Paper</span>
+        </button>
+
+        <button class="choice-button" onclick="playGame('scissors')">
+            <img
+                src="{{ url_for('static', filename='assets/Scissors.png') }}"
+                alt="Scissors"
+            >
+            <span>Scissors</span>
+        </button>
+
+    </div>
+
+    <h2 id="score">Player: 0 | Computer: 0</h2>
+
+    <h3 id="result"></h3>
+
+    <button id="reset-button" onclick="resetGame()">
+        Reset Game
+    </button>
+
+    <a href="{{ url_for('home') }}" class="home-button">
+        Back to Home
+    </a>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/games/rps.js') }}"></script>
+
+{% endblock %}

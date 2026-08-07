@@ -1,0 +1,38 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.home-page {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    background-color: lightblue;
+}
+
+.game-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-decoration: none;
+    color: black;
+}
+
+.game-card img {
+    width: 400px;
+    border-radius: 10px;
+}
+
+.game-card span {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
