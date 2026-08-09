@@ -1,0 +1,21 @@
+<svg viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="350" fill="none"/>
+
+  <!-- Gallows -->
+  <line x1="20" y1="330" x2="180" y2="330" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="60" y1="330" x2="60" y2="30" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="60" y1="30" x2="180" y2="30" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="180" y1="30" x2="180" y2="60" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+
+  <circle cx="180" cy="90" r="30" stroke="#2b2b2b" stroke-width="6" fill="none"/>
+  <line x1="180" y1="120" x2="180" y2="210" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="180" y1="140" x2="140" y2="180" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="180" y1="140" x2="220" y2="180" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="180" y1="210" x2="150" y2="270" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="180" y1="210" x2="210" y2="270" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+
+  <circle cx="170" cy="85" r="3" fill="#2b2b2b"/>
+  <circle cx="190" cy="85" r="3" fill="#2b2b2b"/>
+  <path d="M 168 105 Q 180 95 192 105" stroke="#2b2b2b" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+</svg>

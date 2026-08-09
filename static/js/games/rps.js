@@ -21,15 +21,18 @@ async function playGame(choice) {
     `Player: ${data.player_score} | Computer: ${data.computer_score}`;
 }
 
-async function resetGame() {
-    const response = await fetch("/api/rps/reset", {
+function resetGame() {
+    fetch("/api/rps/reset", {
         method: "POST"
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        document.getElementById("score").textContent =
+            `Player: ${data.player_score} | Computer: ${data.computer_score}`;
+
+        document.getElementById("result").textContent = "";
     });
-
-    const data = await response.json();
-
-    document.getElementById("score").textContent =
-        `Player: ${data.player_score} | Computer: ${data.computer_score}`;
-
-    document.getElementById("result").textContent = "";
 }
+
+

@@ -9,10 +9,17 @@ body {
 
     display: flex;
     flex-direction: column;
-
     align-items: center;
 
     background-color: lightblue;
+}
+
+/* NEW */
+.game-container {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 30px;
 }
 
 .game-card {
@@ -24,8 +31,11 @@ body {
     color: black;
 }
 
+/* Changed from 400px to a smaller size */
 .game-card img {
-    width: 400px;
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
     border-radius: 10px;
 }
 
@@ -35,4 +45,13 @@ body {
     background-color: white;
     border-radius: 8px;
     font-weight: bold;
+}
+
+.game-box {
+    width: 250px;
+    height: 320px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

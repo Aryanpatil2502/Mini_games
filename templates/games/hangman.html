@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/games/hangman.css') }}">
+{% endblock %}
+
+{% block title %}
+Hangman
+{% endblock %}
+
+{% block body_class %}
+hangman-page
+{% endblock %}
+
+{% block body %}
+
+<h1>Hangman</h1>
+
+<div class="hangman-image">
+    <img
+        id="hangman-image"
+        src="{{ url_for('static', filename='assets/hangman/hangman_0.svg') }}"
+        alt="Hangman"
+    >
+</div>
+
+
+<h2 id="word">_____</h2>
+
+
+<div class="guess-section">
+
+    <input
+        type="text"
+        id="letter-input"
+        maxlength="1"
+        autocomplete="off"
+        placeholder="Enter a letter"
+    >
+
+    <button id="guess-button" onclick="submitGuess()">
+        Guess
+    </button>
+
+</div>
+
+
+<p id="guessed-letters">
+    Guessed letters:
+</p>
+
+
+<p id="guesses">
+    Incorrect guesses: 0 / 6
+</p>
+
+
+<h2 id="result"></h2>
+
+<p id="word-was"></p>
+
+
+<button id="new-game-button" onclick="newGame()">
+    New Game
+</button>
+
+
+<a href="{{ url_for('home') }}" class="home-button">
+    Back to Home
+</a>
+
+<script src="{{ url_for('static', filename='js/games/hangman.js') }}"></script>
+
+{% endblock %}

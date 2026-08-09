@@ -1,0 +1,13 @@
+<svg viewBox="0 0 300 350" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="350" fill="none"/>
+
+  <!-- Gallows -->
+  <line x1="20" y1="330" x2="180" y2="330" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="60" y1="330" x2="60" y2="30" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="60" y1="30" x2="180" y2="30" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+  <line x1="180" y1="30" x2="180" y2="60" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+
+  <circle cx="180" cy="90" r="30" stroke="#2b2b2b" stroke-width="6" fill="none"/>
+  <line x1="180" y1="120" x2="180" y2="210" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round"/>
+
+</svg>

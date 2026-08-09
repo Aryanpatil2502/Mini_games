@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+
 {% block title %}
-    Home Page
+Home Page
 {% endblock %}
 
 {% block body_class %}
@@ -8,12 +9,38 @@ home-page
 {% endblock %}
 
 {% block body %}
-    <h1>Welcome to the Home Page!</h1>
-    <p>This is the content of the home page.</p>
 
-    <a href="{{ url_for('rps_page') }}" class="game-card">
-    <img src="{{ url_for('static', filename='assets/RPS.png') }}"
-         alt="Rock Paper Scissors">
-    <span>Rock Paper Scissors</span>
-</a>
+<h1>Welcome to the Home Page!</h1>
+<p>This is the content of the home page.</p>
+
+
+
+<div class="game-container">
+
+    <div class="game-box">
+        <a href="{{ url_for('rps_page') }}" class="game-card">
+            <img src="{{ url_for('static', filename='assets/RPS.png') }}"
+                 alt="Rock Paper Scissors">
+            <span>Rock Paper Scissors</span>
+        </a>
+    </div>
+
+    <div class="game-box">
+        <a href="{{ url_for('hangman_page') }}" class="game-card">
+            <img src="{{ url_for('static', filename='assets/hangman.jpg') }}"
+                 alt="Hangman">
+            <span>Hangman</span>
+        </a>
+    </div>
+
+    <div class="game-box">
+        <a href="#" class="game-card">
+            <img src="{{ url_for('static', filename='assets/tictactoe.png') }}"
+                 alt="Tic Tac Toe">
+            <span>Tic Tac Toe</span>
+        </a>
+    </div>
+
+</div>
+
 {% endblock %}

@@ -1,0 +1,144 @@
+.hangman-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: lightblue;
+    font-family: Arial, sans-serif;
+}
+
+
+/* Title */
+
+.hangman-page h1 {
+    margin-bottom: 20px;
+    font-size: 40px;
+}
+
+
+/* Hangman image */
+
+.hangman-image {
+    width: 250px;
+    height: 250px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+}
+
+.hangman-image img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+/* Word */
+
+#word {
+    font-size: 35px;
+    letter-spacing: 12px;
+    margin: 15px 0;
+}
+
+
+/* Input and Guess button */
+
+.guess-section {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+#letter-input {
+    width: 60px;
+    height: 50px;
+
+    text-align: center;
+    font-size: 25px;
+
+    border: 2px solid #333;
+    border-radius: 8px;
+}
+
+#guess-button {
+    padding: 10px 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#guess-button:hover {
+    background-color: #eeeeee;
+}
+
+
+/* Guessed letters */
+
+#guessed-letters {
+    font-size: 20px;
+    margin: 10px;
+}
+
+
+/* Incorrect guesses */
+
+#guesses {
+    font-size: 18px;
+}
+
+
+/* Win / Game Over */
+
+#result {
+    min-height: 30px;
+    margin: 10px;
+}
+
+
+/* New Game */
+
+#new-game-button {
+    padding: 10px 25px;
+    margin-top: 15px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#new-game-button:hover {
+    background-color: #eeeeee;
+}
+
+
+/* Back to Home */
+
+.hangman-page .home-button {
+    margin-top: 15px;
+
+    padding: 10px 20px;
+
+    background-color: white;
+    color: black;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.hangman-page .home-button:hover {
+    background-color: #eeeeee;
+}
