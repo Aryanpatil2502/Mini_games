@@ -1,0 +1,84 @@
+.auth-container {
+    max-width: 360px;
+    margin: 80px auto;
+    padding: 32px;
+    border-radius: 8px;
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.auth-container h1 {
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-container label {
+    font-size: 0.9rem;
+    margin-bottom: -6px;
+}
+
+.auth-container input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #444;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.auth-container input:focus {
+    outline: none;
+    border-color: #4caf50;
+}
+
+.auth-container button {
+    margin-top: 12px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #4caf50;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.auth-container button:hover {
+    background-color: #43a047;
+}
+
+.auth-container p {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.auth-container a {
+    color: #4caf50;
+    text-decoration: none;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+}
+
+.flashes {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 16px;
+}
+
+.flashes li {
+    background-color: #4a2020;
+    color: #ff8080;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}

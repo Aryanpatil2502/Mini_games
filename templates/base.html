@@ -15,6 +15,12 @@
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
+    {% if session.user_id %}
+        <nav class="topnav">
+            <span>Welcome, {{ session.username }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </nav>
+    {% endif %}
 
     {% block body %}{% endblock %}
 
