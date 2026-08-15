@@ -51,11 +51,19 @@ def register():
 
     username = request.form["username"]
     password = request.form["password"]
+    confirm_password = request.form["confirm_password"]
+
+    if password != confirm_password:
+        return render_template(
+            "auth/register.html",
+            error="Passwords do not match"
+        )
+ 
 
     existing_user = get_user(username)
 
     if existing_user:
-        return "Username already exists"
+        return redirect(url_for("register"))
 
     password_hash = generate_password_hash(password)
 
