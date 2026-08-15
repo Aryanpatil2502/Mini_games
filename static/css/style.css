@@ -55,3 +55,36 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.logout-button {
+    position: fixed;
+
+    top: 20px;
+    left: 20px;
+
+    padding: 10px 15px;
+
+    background-color: white;
+    color: black;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.delete-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    padding: 10px 15px;
+
+    background-color: red;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+}

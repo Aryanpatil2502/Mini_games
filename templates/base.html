@@ -9,12 +9,16 @@
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/games/hangman.css') }}">
-
     {% block css %}{% endblock %}
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
+
+    {% if session.get("user_id") %}
+        <a href="{{ url_for('logout') }}" class="logout-button">
+            Logout
+        </a>
+    {% endif %}
 
     {% block body %}{% endblock %}
 

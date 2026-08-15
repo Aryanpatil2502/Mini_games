@@ -13,6 +13,12 @@ home-page
 <h1>Welcome to the Home Page!</h1>
 <p>This is the content of the home page.</p>
 
+<form method="POST" action="{{ url_for('delete_account') }}">
+    <button type="submit" class="delete-button">
+        Delete Account
+    </button>
+</form>
+
 
 
 <div class="game-container">

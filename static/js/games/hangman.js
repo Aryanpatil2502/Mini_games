@@ -36,6 +36,77 @@ async function newGame() {
     document.getElementById("letter-input").focus();
 }
 
+async function loadGame() {
+
+    const response = await fetch("/api/hangman/current");
+
+    const data = await response.json();
+
+    // No saved game exists
+    if (!data.game_exists) {
+        newGame();
+        return;
+    }
+
+    // Load saved game
+    gameOver = false;
+
+    document.getElementById("word").textContent =
+        data.display_word;
+
+    document.getElementById("guessed-letters").textContent =
+        "Guessed letters: " +
+        data.guessed_letters.join(" ");
+
+    document.getElementById("guesses").textContent =
+        `Incorrect guesses: ${data.incorrect_guesses} / ${data.max_incorrect_guesses}`;
+
+    document.getElementById("hangman-image").src =
+        `/static/assets/hangman/hangman_${data.incorrect_guesses}.svg`;
+
+    document.getElementById("result").textContent = "";
+
+    document.getElementById("word-was").textContent = "";
+
+    document.getElementById("letter-input").value = "";
+
+    document.getElementById("letter-input").disabled = false;
+
+    document.getElementById("guess-button").disabled = false;
+
+    // If the saved game was already won
+    if (data.won) {
+
+        document.getElementById("result").textContent =
+            "You Win!";
+
+        gameOver = true;
+
+        document.getElementById("letter-input").disabled = true;
+        document.getElementById("guess-button").disabled = true;
+
+        return;
+    }
+
+    // If the saved game was already lost
+    if (data.lost) {
+
+        document.getElementById("result").textContent =
+            "Game Over!";
+
+        document.getElementById("word-was").textContent =
+            `The word was = "${data.word}"`;
+
+        gameOver = true;
+
+        document.getElementById("letter-input").disabled = true;
+        document.getElementById("guess-button").disabled = true;
+
+        return;
+    }
+
+    document.getElementById("letter-input").focus();
+}
 
 async function submitGuess() {
 
@@ -150,4 +221,4 @@ document.getElementById("letter-input").addEventListener(
 );
 
 
-newGame();
+loadGame();
