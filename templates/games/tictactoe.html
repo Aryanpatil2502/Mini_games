@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/games/tictactoe.css') }}">
+{% endblock %}
+
+{% block title %}
+Tic Tac Toe
+{% endblock %}
+
+{% block body_class %}
+tictactoe-page
+{% endblock %}
+
+{% block body %}
+
+<h1>Tic Tac Toe</h1>
+
+<div class="board" id="board">
+    <button class="cell" data-index="0" onclick="playMove(0)"></button>
+    <button class="cell" data-index="1" onclick="playMove(1)"></button>
+    <button class="cell" data-index="2" onclick="playMove(2)"></button>
+    <button class="cell" data-index="3" onclick="playMove(3)"></button>
+    <button class="cell" data-index="4" onclick="playMove(4)"></button>
+    <button class="cell" data-index="5" onclick="playMove(5)"></button>
+    <button class="cell" data-index="6" onclick="playMove(6)"></button>
+    <button class="cell" data-index="7" onclick="playMove(7)"></button>
+    <button class="cell" data-index="8" onclick="playMove(8)"></button>
+</div>
+
+<h2 id="result"></h2>
+
+<button id="new-game-button" onclick="newGame()">
+    New Game
+</button>
+
+<a href="{{ url_for('home') }}" class="home-button">
+    Back to Home
+</a>
+
+<script src="{{ url_for('static', filename='js/games/tictactoe.js') }}"></script>
+
+{% endblock %}

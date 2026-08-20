@@ -1,4 +1,6 @@
 import sqlite3
+import json
+
 
 
 DB_PATH = "user.db"
@@ -43,6 +45,19 @@ def init_db():
             guessed_letters TEXT DEFAULT '',
             incorrect_guesses INTEGER DEFAULT 0,
             max_incorrect_guesses INTEGER DEFAULT 6,
+            status TEXT DEFAULT 'playing',
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
+    # Tic Tac Toe game state
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS tictactoe_games (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER UNIQUE NOT NULL,
+            board TEXT NOT NULL,
+            current_player TEXT NOT NULL,
+            winner TEXT,
             status TEXT DEFAULT 'playing',
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
@@ -93,6 +108,11 @@ def delete_user(user_id):
 
     conn.execute(
         "DELETE FROM hangman_games WHERE user_id = ?",
+        (user_id,)
+    )
+
+    conn.execute(
+        "DELETE FROM tictactoe_games WHERE user_id = ?",
         (user_id,)
     )
 
@@ -237,3 +257,61 @@ def update_hangman_game(
 
     conn.commit()
     conn.close()
+
+# Tic Tac Toe
+def get_tictactoe_game(user_id):
+
+    conn = get_db()
+
+    game = conn.execute(
+        """
+        SELECT * FROM tictactoe_games
+        WHERE user_id = ?
+        """,
+        (user_id,)
+    ).fetchone()
+
+    conn.close()
+
+    return game
+
+def create_tictactoe_game(user_id, board, current_player = "X"):
+
+    conn = get_db()
+
+    conn.execute(
+        """
+        INSERT INTO tictactoe_games
+        (user_id, board, current_player, winner, status)
+        VALUES (?, ?, ?, NULL, 'playing')
+        """,
+        (user_id, json.dumps(board), current_player)
+    )
+
+    conn.commit()
+    conn.close()
+
+def update_tictactoe_game(user_id, board, current_player, winner, status):
+
+    conn = get_db()
+
+    conn.execute(
+        """
+        UPDATE tictactoe_games
+        SET
+            board = ?,
+            current_player = ?,
+            winner = ?,
+            status = ?
+        WHERE user_id = ?
+        """,
+        (
+            json.dumps(board),
+            current_player,
+            winner,
+            status,
+            user_id
+        )
+    )   
+    conn.commit()
+    conn.close()    
