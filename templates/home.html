@@ -24,7 +24,7 @@ home-page
 <div class="game-container">
 
     <div class="game-box">
-        <a href="{{ url_for('rps_page') }}" class="game-card">
+        <a href="{{ url_for('rps.rps_page') }}" class="game-card">
             <img src="{{ url_for('static', filename='assets/RPS.png') }}"
                  alt="Rock Paper Scissors">
             <span>Rock Paper Scissors</span>
@@ -32,7 +32,7 @@ home-page
     </div>
 
     <div class="game-box">
-        <a href="{{ url_for('hangman_page') }}" class="game-card">
+        <a href="{{ url_for('hangman.hangman_page') }}" class="game-card">
             <img src="{{ url_for('static', filename='assets/hangman.jpg') }}"
                  alt="Hangman">
             <span>Hangman</span>
@@ -40,7 +40,7 @@ home-page
     </div>
 
     <div class="game-box">
-        <a href="{{ url_for('tictactoe_page') }}" class="game-card">
+        <a href="{{ url_for('tictactoe.tictactoe_page') }}" class="game-card">
             <img src="{{ url_for('static', filename='assets/tictactoe.jpg') }}"
                  alt="Tic Tac Toe">
             <span>Tic Tac Toe</span>

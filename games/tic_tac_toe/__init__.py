@@ -1,0 +1,1 @@
+from .routes import tictactoe_bp

@@ -1,0 +1,1 @@
+from .routes import hangman_bp

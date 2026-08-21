@@ -24,12 +24,21 @@ from database import (
     create_tictactoe_game,
     update_tictactoe_game
 )
+from games.rps import rps_bp
+from games.hangman import hangman_bp
+from games.tic_tac_toe import tictactoe_bp
+
+
+app = Flask(__name__)
+app.register_blueprint(rps_bp)
+app.register_blueprint(hangman_bp)
+app.register_blueprint(tictactoe_bp)
+
 
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
-app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")  
 
 init_db()
@@ -40,23 +49,6 @@ def home():
         return redirect(url_for("login"))
     return render_template('home.html')
 
-@app.route("/rps")
-def rps_page():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-    return render_template("games/rps.html")
-
-@app.route("/hangman")
-def hangman_page():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-    return render_template("games/hangman.html")
-
-@app.route("/tictactoe")
-def tictactoe_page():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-    return render_template("games/tictactoe.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -133,302 +125,11 @@ def delete_account():
 
 # RPS
 
-@app.route("/api/rps", methods=["POST"])
-def play_rps():
-
-    data = request.get_json()
-    player_choice = data["choice"]
-
-    # Get current logged-in user
-    user_id = session["user_id"]
-
-    # Get this user's RPS game
-    game = get_rps_game(user_id)
-
-    # If user doesn't have an RPS game yet, create one
-    if game is None:
-        create_rps_game(user_id)
-        game = get_rps_game(user_id)
-
-    # Get scores from database
-    player_score = game["player_score"]
-    computer_score = game["computer_score"]
-
-    # Play the game
-    result = rps(
-        player_choice,
-        player_score,
-        computer_score
-    )
-
-    # Save new scores to database
-    update_rps_score(
-        user_id,
-        result["player_score"],
-        result["computer_score"]
-    )
-
-    return jsonify(result)
-
-
-@app.route("/api/rps/reset", methods=["POST"])
-def reset_rps():
-    result = reset_game()
-    session["player_score"] = result["player_score"]
-    session["computer_score"] = result["computer_score"]
-
-    return jsonify(result)
 
 # HANGMAN
 
-@app.route("/api/hangman/current", methods=["GET"])
-def current_hangman():
-
-    user_id = session["user_id"]
-
-    game = get_hangman_game(user_id)
-
-    # User has never played Hangman
-    if game is None:
-        return jsonify({
-            "game_exists": False
-        })
-
-    guessed_letters = list(game["guessed_letters"])
-
-    game_data = {
-        "word": game["word"],
-        "guessed_letters": guessed_letters,
-        "incorrect_guesses": game["incorrect_guesses"],
-        "max_incorrect_guesses": game["max_incorrect_guesses"]
-    }
-
-    display_word = get_display_word(game_data)
-
-    won = "_" not in display_word
-    lost = game["incorrect_guesses"] >= game["max_incorrect_guesses"]
-
-    return jsonify({
-        "game_exists": True,
-        "display_word": display_word,
-        "guessed_letters": guessed_letters,
-        "incorrect_guesses": game["incorrect_guesses"],
-        "max_incorrect_guesses": game["max_incorrect_guesses"],
-        "won": won,
-        "lost": lost,
-        "word": game["word"] if lost else ""
-    })
-
-@app.route("/api/hangman/new", methods=["POST"])
-def start_hangman():
-
-    user_id = session["user_id"]
-
-    # Create a new game using your existing logic
-    game = new_hangman_game()
-
-    # Save it to database
-    existing_game = get_hangman_game(user_id)
-
-    if existing_game is None:
-        create_hangman_game(
-            user_id,
-            game["word"],
-            "",
-            0
-        )
-    else:
-        update_hangman_game(
-            user_id,
-            game["word"],
-            "",
-            0,
-            "playing"
-        )
-
-    return jsonify({
-        "display_word": get_display_word(game),
-        "guessed_letters": game["guessed_letters"],
-        "incorrect_guesses": game["incorrect_guesses"],
-        "max_incorrect_guesses": game["max_incorrect_guesses"],
-        "game_over": False
-    })
-
-
-
-@app.route("/api/hangman/guess", methods=["POST"])
-def play_hangman():
-
-    user_id = session["user_id"]
-
-    data = request.get_json()
-    letter = data["guess"]
-
-    # Get this user's Hangman game from database
-    db_game = get_hangman_game(user_id)
-
-    if db_game is None:
-        return jsonify({
-            "error": "No game found"
-        }), 400
-
-    # Convert database row back into the format
-    # your existing game logic expects
-    game = {
-        "word": db_game["word"],
-        "guessed_letters": list(db_game["guessed_letters"]),
-        "incorrect_guesses": db_game["incorrect_guesses"],
-        "max_incorrect_guesses": db_game["max_incorrect_guesses"]
-    }
-
-    # Use your existing logic
-    game = guess_letter(game, letter)
-
-    display_word = get_display_word(game)
-
-    won = "_" not in display_word
-
-    lost = (
-        game["incorrect_guesses"]
-        >= game["max_incorrect_guesses"]
-    )
-
-    # Determine status for database
-    if won:
-        status = "won"
-    elif lost:
-        status = "lost"
-    else:
-        status = "playing"
-
-    # Save updated game
-    update_hangman_game(
-        user_id,
-        game["word"],
-        "".join(game["guessed_letters"]),
-        game["incorrect_guesses"],
-        status
-    )
-
-    return jsonify({
-        "display_word": display_word,
-        "guessed_letters": game["guessed_letters"],
-        "incorrect_guesses": game["incorrect_guesses"],
-        "max_incorrect_guesses": game["max_incorrect_guesses"],
-        "won": won,
-        "lost": lost,
-        "word": game["word"]
-    })
 
 # Tic Tac Toe
-
-@app.route("/api/tictactoe/current", methods=["GET"])
-def current_tictactoe():
-
-    user_id = session["user_id"]
-    
-    db_game = get_tictactoe_game(user_id)
-
-    if db_game is None:
-        return jsonify({
-            "game_exists": False
-        })
-    
-    return jsonify({
-        "game_exists": True,
-        "board": json.loads(db_game["board"]),
-        "current_player": db_game["current_player"],
-        "winner": db_game["winner"],
-        "status": db_game["status"]
-    })
-
-@app.route("/api/tictactoe/new", methods=["POST"])
-def start_tictactoe():
-
-    user_id = session["user_id"]
-
-    game = new_tictactoe_game()
-
-    existing_game = get_tictactoe_game(user_id)
-
-    if existing_game is None:
-        create_tictactoe_game(
-            user_id,
-            game["board"],
-            game["current_player"]
-        )
-    else:
-        update_tictactoe_game(
-            user_id,
-            game["board"],
-            game["current_player"],
-            game["winner"],
-            "playing"
-        )
-
-    return jsonify({
-        "board": game["board"],
-        "current_player": game["current_player"],
-        "winner": game["winner"],
-        "status": "playing"
-    })
-
-@app.route("/api/tictactoe/move", methods=["POST"])
-def play_tictactoe():
-
-    user_id = session["user_id"]
-
-    data = request.get_json()
-    move = data["move"]
-
-    db_game = get_tictactoe_game(user_id)
-
-    if db_game is None:
-        return jsonify({"error": "No game found"}), 400
-
-    # Rebuild the game dict from the database row
-    game = {
-        "board": json.loads(db_game["board"]),
-        "current_player": db_game["current_player"],
-        "winner": db_game["winner"],
-        "game_over": db_game["status"] != "playing"
-    }
-
-    # Player's move
-    game, success = make_move(game, move)
-
-    if not success:
-        return jsonify({"error": "Invalid move"}), 400
-
-    game = check_winner(game)
-
-    # Computer's move, only if game isn't already over
-    if not game["game_over"]:
-        game = computer_move(game)
-        game = check_winner(game)
-
-    # Determine status for database
-    if game["winner"]:
-        status = "won" if game["winner"] == "X" else "lost"
-    elif game["game_over"]:
-        status = "draw"
-    else:
-        status = "playing"
-
-    update_tictactoe_game(
-        user_id,
-        game["board"],
-        game["current_player"],
-        game["winner"],
-        status
-    )
-
-    return jsonify({
-        "board": game["board"],
-        "current_player": game["current_player"],
-        "winner": game["winner"],
-        "status": status
-    })
 
 
 
