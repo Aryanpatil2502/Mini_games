@@ -1,46 +1,27 @@
-import json
-from flask import Flask,render_template,request, jsonify, session, redirect, url_for
-from games.rps.logic import rps, reset_game
-from games.hangman.logic import new_hangman_game, guess_letter, get_display_word
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-from games.tic_tac_toe.logic import new_tictactoe_game, make_move, computer_move, check_winner
 from database import (
     init_db,
     add_user,
     get_user,
-    delete_user,
-    # RPS
-    get_rps_game,
-    create_rps_game,
-    update_rps_score,
-
-    # Hangman
-    get_hangman_game,
-    create_hangman_game,
-    update_hangman_game,
-
-    # Tic Tac Toe
-    get_tictactoe_game,
-    create_tictactoe_game,
-    update_tictactoe_game
+    delete_user
 )
 from games.rps import rps_bp
 from games.hangman import hangman_bp
 from games.tic_tac_toe import tictactoe_bp
-
+from games.memory_card import memory_bp
 
 app = Flask(__name__)
 app.register_blueprint(rps_bp)
 app.register_blueprint(hangman_bp)
 app.register_blueprint(tictactoe_bp)
-
+app.register_blueprint(memory_bp)
 
 import os
 from dotenv import load_dotenv
 load_dotenv()
 
 app.secret_key = os.environ.get("SECRET_KEY")  
-
 init_db()
 
 @app.route('/')
@@ -48,7 +29,6 @@ def home():
     if "user_id" not in session:
         return redirect(url_for("login"))
     return render_template('home.html')
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -64,8 +44,7 @@ def register():
             "auth/register.html",
             error="Passwords do not match"
         )
- 
-
+        
     existing_user = get_user(username)
 
     if existing_user:
@@ -123,16 +102,6 @@ def delete_account():
 
     return redirect(url_for("register"))
 
-# RPS
-
-
-# HANGMAN
-
-
-# Tic Tac Toe
-
-
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
 

@@ -1,6 +1,5 @@
 let gameOver = false;
 
-
 function renderBoard(board) {
 
     const flatBoard = board.flat();
@@ -12,7 +11,6 @@ function renderBoard(board) {
     });
 }
 
-
 function setBoardEnabled(enabled) {
 
     const cells = document.querySelectorAll(".cell");
@@ -21,7 +19,6 @@ function setBoardEnabled(enabled) {
         cell.disabled = !enabled;
     });
 }
-
 
 async function newGame() {
 
@@ -39,7 +36,6 @@ async function newGame() {
 
     setBoardEnabled(true);
 }
-
 
 async function loadGame() {
 

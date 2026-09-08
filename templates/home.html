@@ -47,6 +47,14 @@ home-page
         </a>
     </div>
 
+    <div class="game-box">
+        <a href="{{ url_for('memory.memory_page') }}" class="game-card">
+            <img src="{{ url_for('static', filename='assets/memory.jpg') }}"
+                 alt="Memory Match">
+            <span>Memory Match</span>
+        </a>
+    </div>
+
 </div>
 
 {% endblock %}

@@ -16,7 +16,8 @@ body {
 
 /* NEW */
 .game-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
     justify-content: center;
     gap: 60px;
     margin-top: 30px;

@@ -63,6 +63,19 @@ def init_db():
         )
     """)
 
+    # Memory game state
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS memory_games (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER UNIQUE NOT NULL,
+            cards TEXT NOT NULL,
+            flipped TEXT NOT NULL,
+            matched_count INTEGER DEFAULT 0,
+            game_over INTEGER DEFAULT 0,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     conn.commit()
     conn.close()
 
@@ -113,6 +126,11 @@ def delete_user(user_id):
 
     conn.execute(
         "DELETE FROM tictactoe_games WHERE user_id = ?",
+        (user_id,)
+    )
+
+    conn.execute(
+        "DELETE FROM memory_games WHERE user_id = ?",
         (user_id,)
     )
 
@@ -315,3 +333,70 @@ def update_tictactoe_game(user_id, board, current_player, winner, status):
     )   
     conn.commit()
     conn.close()    
+
+# Memory
+def get_memory_game(user_id):
+
+    conn = get_db()
+
+    game = conn.execute(
+        """
+        SELECT * FROM memory_games
+        WHERE user_id = ?
+        """,
+        (user_id,)
+    ).fetchone()
+
+    conn.close()
+
+    return game
+
+
+def create_memory_game(user_id, cards, flipped, matched_count, game_over):
+
+    conn = get_db()
+
+    conn.execute(
+        """
+        INSERT INTO memory_games
+        (user_id, cards, flipped, matched_count, game_over)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            user_id,
+            json.dumps(cards),
+            json.dumps(flipped),
+            matched_count,
+            int(game_over)
+        )
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def update_memory_game(user_id, cards, flipped, matched_count, game_over):
+
+    conn = get_db()
+
+    conn.execute(
+        """
+        UPDATE memory_games
+        SET
+            cards = ?,
+            flipped = ?,
+            matched_count = ?,
+            game_over = ?
+        WHERE user_id = ?
+        """,
+        (
+            json.dumps(cards),
+            json.dumps(flipped),
+            matched_count,
+            int(game_over),
+            user_id
+        )
+    )
+
+    conn.commit()
+    conn.close()
