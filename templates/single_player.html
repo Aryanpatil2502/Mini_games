@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+Single Player
+{% endblock %}
+
+{% block body_class %}
+mode-page
+{% endblock %}
+
+{% block body %}
+
+{% set back_url = url_for('home') %}
+{% include "_page_header.html" with context %}
+
+<h1>Single Player</h1>
+
+<div class="game-container">
+
+    <div class="game-box">
+        <a href="{{ url_for('rps.rps_page') }}" class="game-card">
+            <img src="{{ url_for('static', filename='assets/RPS.png') }}" alt="Rock Paper Scissors">
+            <span>Rock Paper Scissors</span>
+        </a>
+    </div>
+
+    <div class="game-box">
+        <a href="{{ url_for('hangman.hangman_page') }}" class="game-card">
+            <img src="{{ url_for('static', filename='assets/hangman.jpg') }}" alt="Hangman">
+            <span>Hangman</span>
+        </a>
+    </div>
+
+    <div class="game-box">
+        <a href="{{ url_for('tictactoe.tictactoe_page') }}" class="game-card">
+            <img src="{{ url_for('static', filename='assets/tictactoe.jpg') }}" alt="Tic Tac Toe">
+            <span>Tic Tac Toe</span>
+        </a>
+    </div>
+
+    <div class="game-box">
+        <a href="{{ url_for('memory.memory_page') }}" class="game-card">
+            <img src="{{ url_for('static', filename='assets/memory.jpg') }}" alt="Memory Match">
+            <span>Memory Match</span>
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

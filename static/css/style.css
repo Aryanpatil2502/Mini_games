@@ -4,23 +4,184 @@ body {
     background-color: #f0f0f0;
 }
 
-.home-page {
+/* ---------- Pages ---------- */
+
+.home-page,
+.mode-page,
+.profile-page {
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lightblue;
+}
+
+/* ---------- Header (Go Back + profile icon) ---------- */
+
+.page-header {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.go-back-button {
+    padding: 10px 15px;
+    background-color: white;
+    color: black;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.profile-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: white;
+    display: block;
+}
+
+.go-back-button:focus-visible,
+.profile-icon:focus-visible,
+.mode-card:focus-visible,
+.action-button:focus-visible {
+    outline: 3px solid #1a4fd6;
+    outline-offset: 3px;
+}
+
+/* ---------- Home ---------- */
+
+.home-page {
+    --ink: #1b1f3b;
+    --sky: #bfe3ff;
+    --sun: #ffd23f;
+    --coral: #ff8fa3;
+
+    background-color: var(--sky);
+    justify-content: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.home-greeting {
+    margin: 0 0 8px;
+    font-size: 2.1rem;
+    color: var(--ink);
+}
+
+.home-page .home-title {
+    margin: 0;
+    font-family: "Lilita One", "Trebuchet MS", "Arial Black", sans-serif;
+    font-weight: normal;
+    font-size: clamp(3rem, 9vw, 5.5rem);
+    line-height: 1;
+    letter-spacing: 1px;
+    color: var(--ink);
+}
+
+.home-subtitle {
+    margin: 14px 0 0;
+    font-size: 1.15rem;
+    color: var(--ink);
+}
+
+.home-page .mode-choice {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 48px;
+}
+
+.home-page .mode-card {
+    width: 280px;
+    padding: 36px 24px 32px;
+    box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 8px;
 
-    background-color: lightblue;
+    color: var(--ink);
+    text-decoration: none;
+
+    border: 3px solid var(--ink);
+    border-radius: 18px;
+    box-shadow: 8px 8px 0 var(--ink);
+
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-/* NEW */
+.home-page .mode-card.single {
+    background-color: var(--sun);
+}
+
+.home-page .mode-card.multi {
+    background-color: var(--coral);
+}
+
+.home-page .mode-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0 var(--ink);
+}
+
+.home-page .mode-card:active {
+    transform: translate(6px, 6px);
+    box-shadow: 2px 2px 0 var(--ink);
+}
+
+.mode-icon {
+    width: 84px;
+    height: 84px;
+    fill: var(--ink);
+    margin-bottom: 8px;
+}
+
+.mode-name {
+    font-family: "Lilita One", "Trebuchet MS", "Arial Black", sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.5px;
+}
+
+.mode-desc {
+    font-size: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-page .mode-card {
+        transition: none;
+    }
+}
+
+/* ---------- Singleplayer / Multiplayer game grids ---------- */
+
 .game-container {
     display: grid;
     grid-template-columns: repeat(3, 250px);
     justify-content: center;
     gap: 60px;
     margin-top: 30px;
+}
+
+.game-box {
+    width: 250px;
+    height: 320px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .game-card {
@@ -32,7 +193,6 @@ body {
     color: black;
 }
 
-/* Changed from 400px to a smaller size */
 .game-card img {
     width: 250px;
     height: 250px;
@@ -48,44 +208,53 @@ body {
     font-weight: bold;
 }
 
-.game-box {
-    width: 250px;
-    height: 320px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.game-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.logout-button {
-    position: fixed;
+@media (max-width: 900px) {
+    .game-container {
+        grid-template-columns: repeat(2, 250px);
+        gap: 30px;
+    }
+}
 
-    top: 20px;
-    left: 20px;
+@media (max-width: 560px) {
+    .game-container {
+        grid-template-columns: 250px;
+    }
+}
 
-    padding: 10px 15px;
+/* ---------- Profile ---------- */
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 30px;
+    width: 240px;
+}
+
+.action-button {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 12px 15px;
 
     background-color: white;
     color: black;
-
+    text-align: center;
     text-decoration: none;
-
-    border-radius: 8px;
+    font-size: 1rem;
     font-weight: bold;
-}
-
-.delete-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-
-    padding: 10px 15px;
-
-    background-color: red;
-    color: white;
 
     border: none;
     border-radius: 8px;
-
     cursor: pointer;
+}
+
+.action-button.danger {
+    background-color: #d32f2f;
+    color: white;
 }

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body_class %}
+profile-page
+{% endblock %}
+
+{% block body %}
+
+<header class="page-header">
+    <a href="{{ url_for('home') }}"
+       class="back-button"
+       onclick="if (history.length > 1) { history.back(); return false; }">
+        Go back
+    </a>
+</header>
+
+<h1>{{ username }}</h1>
+
+<div class="profile-actions">
+    <a href="{{ url_for('logout') }}" class="action-button">Logout</a>
+
+    <form action="{{ url_for('delete_account') }}"
+          method="POST"
+          onsubmit="return confirm('Delete your account? This cannot be undone.');">
+        <button type="submit" class="action-button danger">Delete account</button>
+    </form>
+</div>
+
+{% endblock %}

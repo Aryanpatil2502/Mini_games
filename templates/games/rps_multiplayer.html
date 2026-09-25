@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+Rock Paper Scissors - Multiplayer
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/games/rps.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/games/rps_multiplayer.css') }}">
+{% endblock %}
+
+{% block body_class %}
+rps-page
+{% endblock %}
+
+{% block body %}
+
+<div class="rps-container" data-username="{{ session.get('username') }}">
+
+    <h1>Rock Paper Scissors</h1>
+
+    <!-- Lobby: create or join -->
+    <div id="lobby">
+        <button id="create-room-button" class="mp-button">Create Room</button>
+
+        <p class="mp-or">or join a friend's room</p>
+
+        <div class="join-row">
+            <input type="text" id="code-input" maxlength="5"
+                   placeholder="CODE" autocomplete="off">
+            <button id="join-room-button" class="mp-button">Join Room</button>
+        </div>
+    </div>
+
+    <!-- Waiting for opponent -->
+    <div id="waiting" hidden>
+        <p>Share this code with your friend:</p>
+        <h2 id="room-code"></h2>
+        <p>Waiting for opponent...</p>
+    </div>
+
+    <!-- Game -->
+    <div id="game" hidden>
+
+        <h3 id="versus"></h3>
+
+        <div class="choices">
+
+            <button class="choice-button" data-choice="rock">
+                <img src="{{ url_for('static', filename='assets/Rock.png') }}" alt="Rock">
+                <span>Rock</span>
+            </button>
+
+            <button class="choice-button" data-choice="paper">
+                <img src="{{ url_for('static', filename='assets/Paper.png') }}" alt="Paper">
+                <span>Paper</span>
+            </button>
+
+            <button class="choice-button" data-choice="scissors">
+                <img src="{{ url_for('static', filename='assets/Scissors.png') }}" alt="Scissors">
+                <span>Scissors</span>
+            </button>
+
+        </div>
+
+        <h2 id="score">You: 0 | Opponent: 0</h2>
+
+    </div>
+
+    <h3 id="result"></h3>
+
+    <p id="error" class="mp-error"></p>
+
+    <a href="{{ url_for('multiplayer') }}" class="home-button">
+        Back to Multiplayer
+    </a>
+
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='js/games/rps_multiplayer.js') }}"></script>
+
+{% endblock %}

@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 
 {% block title %}
-Home Page
+Home
+{% endblock %}
+
+{% block css %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
 {% endblock %}
 
 {% block body_class %}
@@ -10,51 +16,36 @@ home-page
 
 {% block body %}
 
-<h1>Welcome to the Home Page!</h1>
-<p>This is the content of the home page.</p>
+<main class="home">
 
-<form method="POST" action="{{ url_for('delete_account') }}">
-    <button type="submit" class="delete-button">
-        Delete Account
-    </button>
-</form>
+    <h1 class="home-greeting">Hi, {{ session.get('username') }}</h1>
+    <h1 class="home-title">Mini Games</h1>
+    <p class="home-subtitle">Pick how you want to play.</p>
 
+    <div class="mode-choice">
 
-
-<div class="game-container">
-
-    <div class="game-box">
-        <a href="{{ url_for('rps.rps_page') }}" class="game-card">
-            <img src="{{ url_for('static', filename='assets/RPS.png') }}"
-                 alt="Rock Paper Scissors">
-            <span>Rock Paper Scissors</span>
+        <a href="{{ url_for('single_player') }}" class="mode-card single">
+            <svg class="mode-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="20" r="11"/>
+                <path d="M12 56c0-12 9-20 20-20s20 8 20 20z"/>
+            </svg>
+            <span class="mode-name">Singleplayer</span>
+            <span class="mode-desc">Play on your own.</span>
         </a>
+
+        <a href="{{ url_for('multiplayer') }}" class="mode-card multi">
+            <svg class="mode-icon" viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="20" cy="22" r="9"/>
+                <path d="M4 54c0-10 7-17 16-17s16 7 16 17z"/>
+                <circle cx="44" cy="22" r="9"/>
+                <path d="M32 54c0-10 5-17 12-17s16 7 16 17z"/>
+            </svg>
+            <span class="mode-name">Multiplayer</span>
+            <span class="mode-desc">Play with friends.</span>
+        </a>
+
     </div>
 
-    <div class="game-box">
-        <a href="{{ url_for('hangman.hangman_page') }}" class="game-card">
-            <img src="{{ url_for('static', filename='assets/hangman.jpg') }}"
-                 alt="Hangman">
-            <span>Hangman</span>
-        </a>
-    </div>
-
-    <div class="game-box">
-        <a href="{{ url_for('tictactoe.tictactoe_page') }}" class="game-card">
-            <img src="{{ url_for('static', filename='assets/tictactoe.jpg') }}"
-                 alt="Tic Tac Toe">
-            <span>Tic Tac Toe</span>
-        </a>
-    </div>
-
-    <div class="game-box">
-        <a href="{{ url_for('memory.memory_page') }}" class="game-card">
-            <img src="{{ url_for('static', filename='assets/memory.jpg') }}"
-                 alt="Memory Match">
-            <span>Memory Match</span>
-        </a>
-    </div>
-
-</div>
+</main>
 
 {% endblock %}

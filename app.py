@@ -1,3 +1,4 @@
+from flask_socketio import SocketIO
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import (
@@ -10,16 +11,23 @@ from games.rps import rps_bp
 from games.hangman import hangman_bp
 from games.tic_tac_toe import tictactoe_bp
 from games.memory_card import memory_bp
+from games.rps.multiplayer import register_rps_multiplayer
+import os
+from dotenv import load_dotenv
+
+
 
 app = Flask(__name__)
+Socketio = SocketIO(app)
 app.register_blueprint(rps_bp)
 app.register_blueprint(hangman_bp)
 app.register_blueprint(tictactoe_bp)
 app.register_blueprint(memory_bp)
 
-import os
-from dotenv import load_dotenv
+
 load_dotenv()
+
+register_rps_multiplayer(Socketio)
 
 app.secret_key = os.environ.get("SECRET_KEY")  
 init_db()
@@ -102,6 +110,26 @@ def delete_account():
 
     return redirect(url_for("register"))
 
+@app.route('/profile')
+def profile():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    return render_template('profile.html', username=session.get("username"))
+
+@app.route('/single-player')
+def single_player():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    return render_template('single_player.html')
+
+
+@app.route('/multiplayer')
+def multiplayer():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    return render_template('multiplayer.html')
+
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    Socketio.run(app, debug=True, host='0.0.0.0', port=5000)
 

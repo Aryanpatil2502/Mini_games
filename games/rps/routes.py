@@ -70,3 +70,11 @@ def reset_rps():
         "player_score": 0,
         "computer_score": 0
     })
+
+@rps_bp.route("/rps/multiplayer")
+def rps_multiplayer_page():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("games/rps_multiplayer.html")

@@ -1,0 +1,63 @@
+.rps-container p,
+.rps-container h3 {
+    color: white;
+}
+
+.mp-button {
+    padding: 12px 28px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #337ab7;
+    color: white;
+
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mp-button:hover {
+    background-color: #286090;
+}
+
+.mp-or {
+    margin: 20px 0 10px;
+}
+
+.join-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#code-input {
+    width: 140px;
+    padding: 10px;
+
+    border: 2px solid #333;
+    border-radius: 8px;
+
+    text-align: center;
+    font-size: 1.4rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+}
+
+#room-code {
+    font-size: 3rem;
+    letter-spacing: 12px;
+    color: white;
+}
+
+.choice-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.mp-error {
+    min-height: 1.4em;
+    color: #ffd23f;
+    font-weight: bold;
+}

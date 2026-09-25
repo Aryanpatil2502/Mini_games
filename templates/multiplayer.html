@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}
+Multiplayer
+{% endblock %}
+
+{% block body_class %}
+mode-page
+{% endblock %}
+
+{% block body %}
+
+{% set back_url = url_for('home') %}
+{% include "_page_header.html" with context %}
+
+<h1>Multiplayer</h1>
+
+<div class="game-container">
+
+    <div class="game-box">
+        <a href="/rps/multiplayer" class="game-card">
+            <img src="{{ url_for('static', filename='assets/RPS.png') }}" alt="Rock Paper Scissors">
+            <span>Rock Paper Scissors</span>
+        </a>
+    </div>
+
+    <div class="game-box">
+        <div class="game-card disabled" aria-disabled="true">
+            <img src="{{ url_for('static', filename='assets/hangman.jpg') }}" alt="Hangman">
+            <span>Coming soon</span>
+        </div>
+    </div>
+
+    <div class="game-box">
+        <div class="game-card disabled" aria-disabled="true">
+            <img src="{{ url_for('static', filename='assets/tictactoe.jpg') }}" alt="Tic Tac Toe">
+            <span>Coming soon</span>
+        </div>
+    </div>
+
+    <div class="game-box">
+        <div class="game-card disabled" aria-disabled="true">
+            <img src="{{ url_for('static', filename='assets/memory.jpg') }}" alt="Memory Match">
+            <span>Coming soon</span>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
