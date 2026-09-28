@@ -131,3 +131,11 @@ def resolve_memory():
     _save_game(user_id, game, is_new=False)
 
     return jsonify(game)
+
+@memory_bp.route("/memory/multiplayer")
+def memory_multiplayer_page():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("games/memory_multiplayer.html")

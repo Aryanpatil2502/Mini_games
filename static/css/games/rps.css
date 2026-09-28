@@ -1,4 +1,4 @@
-/* Entire RPS page */
+
 .rps-page {
     min-height: 100vh;
     margin: 0;
@@ -10,26 +10,23 @@
     background-color: #945555;
 }
 
-/* Main game container */
 .rps-container {
     text-align: center;
     padding: 30px;
 }
 
-/* Title */
+
 .rps-container h1 {
     margin-bottom: 30px;
     color: white;
 }
 
-/* Rock / Paper / Scissors buttons */
 .choices {
     display: flex;
     justify-content: center;
     gap: 25px;
 }
 
-/* All three buttons have exactly the same size */
 .choice-button {
     width: 220px;
     height: 280px;
@@ -50,7 +47,6 @@
     transition: transform 0.2s, background-color 0.2s;
 }
 
-/* Make all images the same size */
 .choice-button img {
     width: 190px;
     height: 220px;
@@ -58,32 +54,30 @@
     object-fit: contain;
 }
 
-/* Text underneath image */
 .choice-button span {
     font-size: 20px;
     font-weight: bold;
     color: white;
 }
 
-/* Hover effect */
+
 .choice-button:hover {
     transform: translateY(-8px);
     background-color: #444;
 }
 
-/* Score */
+
 #score {
     margin-top: 30px;
     color: white;
 }
 
-/* Result */
+
 #result {
     min-height: 30px;
     color: white;
 }
 
-/* Reset button */
 #reset-button {
     margin-top: 10px;
 
@@ -103,7 +97,6 @@
     background-color: #c9302c;
 }
 
-/* Back to home */
 .home-button {
     display: block;
 

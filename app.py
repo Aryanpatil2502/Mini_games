@@ -12,6 +12,7 @@ from games.hangman import hangman_bp
 from games.tic_tac_toe import tictactoe_bp
 from games.memory_card import memory_bp
 from games.rps.multiplayer import register_rps_multiplayer
+from games.memory_card.multiplayer import register_memory_multiplayer
 import os
 from dotenv import load_dotenv
 
@@ -28,6 +29,7 @@ app.register_blueprint(memory_bp)
 load_dotenv()
 
 register_rps_multiplayer(Socketio)
+register_memory_multiplayer(Socketio)
 
 app.secret_key = os.environ.get("SECRET_KEY")  
 init_db()
@@ -128,6 +130,7 @@ def multiplayer():
     if "user_id" not in session:
         return redirect(url_for("login"))
     return render_template('multiplayer.html')
+
 
 
 if __name__ == '__main__':

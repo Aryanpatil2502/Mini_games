@@ -10,10 +10,15 @@ const resultEl = document.getElementById("result");
 const errorEl = document.getElementById("error");
 const choiceButtons = document.querySelectorAll(".choice-button");
 
+const restartButton = document.getElementById("restart-button");
+const restartRequestPanel = document.getElementById("restart-request");
+const restartRequestText = document.getElementById("restart-request-text");
+const acceptRestartButton = document.getElementById("accept-restart-button");
+const declineRestartButton = document.getElementById("decline-restart-button");
+
 let currentCode = null;
-let myScore = 0;
-let opponentScore = 0;
-let creatingRoom = false;
+let opponentName = null;
+let matchOver = false;
 
 
 function show(section) {
@@ -28,9 +33,12 @@ function setChoicesEnabled(enabled) {
     });
 }
 
-function updateScore() {
+function updateScore(wins) {
+    const myWins = wins[myName] || 0;
+    const opponentWins = wins[opponentName] || 0;
+
     document.getElementById("score").textContent =
-        `You: ${myScore} | Opponent: ${opponentScore}`;
+        `${myName}: ${myWins} | ${opponentName}: ${opponentWins}`;
 }
 
 
@@ -38,7 +46,6 @@ function updateScore() {
 
 document.getElementById("create-room-button").addEventListener("click", function() {
     errorEl.textContent = "";
-    creatingRoom = true;
     socket.emit("rps_create_room", {});
 });
 
@@ -70,6 +77,10 @@ function joinRoom() {
 choiceButtons.forEach(function(button) {
     button.addEventListener("click", function() {
 
+        if (matchOver) {
+            return;
+        }
+
         setChoicesEnabled(false);
 
         resultEl.textContent = "Waiting for opponent...";
@@ -96,23 +107,27 @@ socket.on("rps_joined", function(data) {
 
     document.getElementById("room-code").textContent = data.code;
 
-    // Stay on the waiting screen until the match starts
     show("waiting");
 });
 
 // Both players are in
 socket.on("rps_match_ready", function(data) {
 
-    const opponent = data.players.find(function(name) {
+    opponentName = data.players.find(function(name) {
         return name !== myName;
     });
 
-    myScore = 0;
-    opponentScore = 0;
-    updateScore();
+    matchOver = false;
 
-    document.getElementById("versus").textContent = `Playing against ${opponent}`;
+    updateScore(data.wins);
+
+    document.getElementById("versus").textContent =
+        `Playing against ${opponentName} - first to ${data.wins_needed} wins`;
+
     resultEl.textContent = "Make your choice!";
+
+    errorEl.textContent = "";
+    restartRequestPanel.hidden = true;
 
     setChoicesEnabled(true);
     show("game");
@@ -130,22 +145,82 @@ socket.on("rps_round_result", function(data) {
     if (data.winner === null) {
         outcome = "It's a tie!";
     } else if (data.winner === myName) {
-        outcome = "You win!";
-        myScore += 1;
+        outcome = "You win this round!";
     } else {
-        outcome = "Opponent wins!";
-        opponentScore += 1;
+        outcome = "Opponent wins this round!";
+    }
+
+    updateScore(data.wins);
+
+    if (data.match_over) {
+
+        matchOver = true;
+
+        const wonMatch = data.winner === myName;
+
+        resultEl.textContent =
+            `You chose ${myChoice}. Opponent chose ${opponentChoice}. ${outcome} `
+            + (wonMatch ? "You won the match!" : "Opponent won the match.");
+
+        setChoicesEnabled(false);
+
+        return;
     }
 
     resultEl.textContent =
         `You chose ${myChoice}. Opponent chose ${opponentChoice}. ${outcome}`;
 
-    updateScore();
-
     setChoicesEnabled(true);
+});
+
+// Opponent disconnected mid-match - this client wins by default
+socket.on("rps_opponent_left", function(data) {
+
+    matchOver = true;
+
+    resultEl.textContent = "Your opponent left the game. You win by default!";
+
+    setChoicesEnabled(false);
 });
 
 socket.on("rps_join_error", function(data) {
     errorEl.textContent = data.error;
     show("lobby");
+});
+
+socket.on("disconnect", function() {
+    errorEl.textContent = "Connection lost. Refresh the page to reconnect.";
+});
+
+function updateScore(wins) {
+    const myWins = wins[myName] || 0;
+    const opponentWins = wins[opponentName] || 0;
+
+    document.getElementById("score").textContent =
+        `${myName}: ${myWins} | ${opponentName}: ${opponentWins}`;
+}
+
+// RESTART BUTTON
+restartButton.addEventListener("click", function() {
+    socket.emit("rps_restart_request", { code: currentCode });
+    resultEl.textContent = "Restart request sent...";
+});
+
+acceptRestartButton.addEventListener("click", function() {
+    socket.emit("rps_restart_response", { code: currentCode, accepted: true });
+    restartRequestPanel.hidden = true;
+});
+
+declineRestartButton.addEventListener("click", function() {
+    socket.emit("rps_restart_response", { code: currentCode, accepted: false });
+    restartRequestPanel.hidden = true;
+});
+
+socket.on("rps_restart_requested", function(data) {
+    restartRequestText.textContent = `${data.from} wants to restart the match.`;
+    restartRequestPanel.hidden = false;
+});
+
+socket.on("rps_restart_declined", function(data) {
+    resultEl.textContent = `${data.by} declined the restart request.`;
 });

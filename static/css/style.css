@@ -4,7 +4,6 @@ body {
     background-color: #f0f0f0;
 }
 
-/* ---------- Pages ---------- */
 
 .home-page,
 .mode-page,
@@ -16,7 +15,6 @@ body {
     background-color: lightblue;
 }
 
-/* ---------- Header (Go Back + profile icon) ---------- */
 
 .page-header {
     width: 100%;
@@ -53,7 +51,6 @@ body {
     outline-offset: 3px;
 }
 
-/* ---------- Home ---------- */
 
 .home-page {
     --ink: #1b1f3b;
@@ -165,7 +162,6 @@ body {
     }
 }
 
-/* ---------- Singleplayer / Multiplayer game grids ---------- */
 
 .game-container {
     display: grid;
@@ -226,7 +222,6 @@ body {
     }
 }
 
-/* ---------- Profile ---------- */
 
 .profile-actions {
     display: flex;

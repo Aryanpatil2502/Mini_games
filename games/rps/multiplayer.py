@@ -1,11 +1,13 @@
 import random
 import string
-from flask import session
+from flask import session, request
 from flask_socketio import emit, join_room as socketio_join_room
 
 rooms = {}
+sid_to_room = {}  
 
 VALID_CHOICES = ("rock", "paper", "scissors")
+WINS_NEEDED = 5
 
 
 def generate_code():
@@ -28,7 +30,9 @@ def register_rps_multiplayer(socketio):
 
         rooms[code] = {
             "players": [],
-            "choices": {}
+            "choices": {},
+            "wins": {},
+            "closed": False
         }
 
         emit('rps_room_created', {"code": code})
@@ -48,15 +52,27 @@ def register_rps_multiplayer(socketio):
             return
 
         room = rooms[code]
+
+        
+        if room["closed"]:
+            emit('rps_join_error', {"error": "This room has ended"})
+            return
+
         username = session.get("username", "Unknown")
 
-        # Player is already in this room (e.g. page refresh) - let them back in
+    
         if username in room["players"]:
             socketio_join_room(code)
+            sid_to_room[request.sid] = code
+
             emit('rps_joined', {"code": code})
 
             if len(room["players"]) == 2:
-                emit('rps_match_ready', {"players": room["players"]})
+                emit('rps_match_ready', {
+                    "players": room["players"],
+                    "wins": room["wins"],
+                    "wins_needed": WINS_NEEDED
+                })
             return
 
         if len(room["players"]) >= 2:
@@ -64,12 +80,19 @@ def register_rps_multiplayer(socketio):
             return
 
         room["players"].append(username)
+        room["wins"][username] = 0
+
         socketio_join_room(code)
+        sid_to_room[request.sid] = code
 
         emit('rps_joined', {"code": code})
 
         if len(room["players"]) == 2:
-            emit('rps_match_ready', {"players": room["players"]}, room=code)
+            emit('rps_match_ready', {
+                "players": room["players"],
+                "wins": room["wins"],
+                "wins_needed": WINS_NEEDED
+            }, room=code)
 
 
     @socketio.on('rps_choice_made')
@@ -85,9 +108,12 @@ def register_rps_multiplayer(socketio):
             return
 
         room = rooms[code]
+
+        if room["closed"]:
+            return
+
         username = session.get("username", "Unknown")
 
-        # Need two players, and the sender must be one of them
         if len(room["players"]) < 2 or username not in room["players"]:
             return
 
@@ -118,13 +144,109 @@ def register_rps_multiplayer(socketio):
             result = f"{player2} wins!"
             winner = player2
 
+        if winner is not None:
+            room["wins"][winner] += 1
+
+        match_over = winner is not None and room["wins"][winner] >= WINS_NEEDED
+
+        if match_over:
+            room["closed"] = True
+
         emit('rps_round_result', {
             "player_1": player1,
             "choice_1": choice1,
             "player_2": player2,
             "choice_2": choice2,
             "result": result,
-            "winner": winner
+            "winner": winner,
+            "wins": room["wins"],
+            "match_over": match_over
         }, room=code)
 
         room["choices"] = {}
+
+
+    @socketio.on('disconnect')
+    def handle_disconnect():
+
+        code = sid_to_room.pop(request.sid, None)
+
+        if code is None or code not in rooms:
+            return
+
+        room = rooms[code]
+
+        if room["closed"]:
+            return
+
+        username = session.get("username", "Unknown")
+
+        if username not in room["players"]:
+            return
+
+        room["closed"] = True
+
+        remaining = [p for p in room["players"] if p != username]
+
+        if remaining:
+            winner = remaining[0]
+            emit('rps_opponent_left', {"winner": winner}, room=code)
+
+
+
+    @socketio.on('rps_restart_request')
+    def handle_restart_request(data):
+
+        if "user_id" not in session:
+            return
+
+        code = data.get("code")
+
+        if code not in rooms:
+            emit('rps_join_error', {"error": "Room not found"})
+            return
+
+        room = rooms[code]
+        username = session.get("username", "Unknown")
+
+        if username not in room["players"]:
+            return
+
+        if len(room["players"]) < 2:
+            emit('rps_join_error', {"error": "Your opponent left"})
+            return
+
+        emit('rps_restart_requested', {"from": username}, room=code, include_self=False)
+
+
+    @socketio.on('rps_restart_response')
+    def handle_restart_response(data):
+
+        if "user_id" not in session:
+            return
+
+        code = data.get("code")
+        accepted = data.get("accepted")
+
+        if code not in rooms:
+            return
+
+        room = rooms[code]
+        username = session.get("username", "Unknown")
+
+        if username not in room["players"]:
+            return
+
+        if not accepted:
+            emit('rps_restart_declined', {"by": username}, room=code, include_self=False)
+            return
+
+        room["choices"] = {}
+        room["wins"] = {p: 0 for p in room["players"]}
+        room["closed"] = False
+
+        emit('rps_match_ready', {
+            "players": room["players"],
+            "wins": room["wins"],
+            "wins_needed": WINS_NEEDED
+        }, room=code)
