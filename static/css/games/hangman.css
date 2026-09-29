@@ -10,15 +10,12 @@
 }
 
 
-/* Title */
 
 .hangman-page h1 {
     margin-bottom: 20px;
     font-size: 40px;
 }
 
-
-/* Hangman image */
 
 .hangman-image {
     width: 250px;
@@ -36,17 +33,12 @@
     max-height: 100%;
 }
 
-
-/* Word */
-
 #word {
     font-size: 35px;
     letter-spacing: 12px;
     margin: 15px 0;
 }
 
-
-/* Input and Guess button */
 
 .guess-section {
     display: flex;
@@ -80,23 +72,16 @@
     background-color: #eeeeee;
 }
 
-
-/* Guessed letters */
-
 #guessed-letters {
     font-size: 20px;
     margin: 10px;
 }
 
 
-/* Incorrect guesses */
-
 #guesses {
     font-size: 18px;
 }
 
-
-/* Win / Game Over */
 
 #result {
     min-height: 30px;
@@ -104,7 +89,6 @@
 }
 
 
-/* New Game */
 
 #new-game-button {
     padding: 10px 25px;
@@ -123,7 +107,6 @@
 }
 
 
-/* Back to Home */
 
 .hangman-page .home-button {
     margin-top: 15px;

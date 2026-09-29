@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+Tic Tac Toe - Multiplayer
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/games/tictactoe.css') }}">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/games/ttt_multiplayer.css') }}">
+{% endblock %}
+
+{% block body_class %}
+tictactoe-page
+{% endblock %}
+
+{% block body %}
+
+<div class="ttt-container" data-username="{{ session.get('username') }}">
+
+    <h1>Tic Tac Toe</h1>
+
+    <div id="lobby">
+        <button id="create-room-button" class="mp-button">Create Room</button>
+
+        <p class="mp-or">or join a friend's room</p>
+
+        <div class="join-row">
+            <input type="text" id="code-input" maxlength="5"
+                   placeholder="CODE" autocomplete="off">
+            <button id="join-room-button" class="mp-button">Join Room</button>
+        </div>
+    </div>
+
+    <div id="waiting" hidden>
+        <p>Share this code with your friend:</p>
+        <h2 id="room-code"></h2>
+        <p>Waiting for opponent...</p>
+    </div>
+
+    <div id="game" hidden>
+
+        <h3 id="versus"></h3>
+        <h3 id="turn-indicator"></h3>
+
+        <div class="board" id="board">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+
+        <h2 id="score">You: 0 | Opponent: 0</h2>
+
+        <button id="restart-button" class="mp-button">
+            Request Restart
+        </button>
+
+        <div id="restart-request" hidden>
+            <p id="restart-request-text"></p>
+            <button id="accept-restart-button" class="mp-button">Accept</button>
+            <button id="decline-restart-button" class="mp-button">Decline</button>
+        </div>
+
+    </div>
+
+    <h3 id="result"></h3>
+
+    <p id="error" class="mp-error"></p>
+
+    <a href="{{ url_for('home') }}" class="home-button">
+        Back to Home
+    </a>
+
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='js/games/ttt_multiplayer.js') }}"></script>
+
+{% endblock %}

@@ -32,15 +32,15 @@ mode-page
     </div>
 
     <div class="game-box">
-        <div class="game-card disabled" aria-disabled="true">
+        <a href="{{ url_for('tictactoe.tictactoe_multiplayer_page') }}" class="game-card">
             <img src="{{ url_for('static', filename='assets/tictactoe.jpg') }}" alt="Tic Tac Toe">
-            <span>Coming soon</span>
-        </div>
+            <span>Tic Tac Toe</span>
+        </a>
     </div>
 
     <div class="game-box">
         <a href="{{ url_for('memory.memory_multiplayer_page') }}" class="game-card">
-            <img src="{{ url_for('static', filename='assets/memory.jpg') }}" alt="Memory Match">
+            <img src="{{ url_for('static', filename='assets/memory-game-numbers.svg') }}" alt="Memory Match">
             <span>Memory Match</span>
         </a>
     </div>

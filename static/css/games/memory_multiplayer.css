@@ -1,23 +1,123 @@
-/* Text colours (memory.css assumes a dark background) */
+
+.memory-page {
+    color-scheme: light dark;
+
+    --bg: #f3f5fa;
+    --text: #1b2130;
+    --muted: #4a5468;
+
+    --cell-bg: #ffffff;
+    --cell-border: #b9c1d3;
+    --cell-text: #1b2130;
+    --cell-hover: #e8edf7;
+
+    --flipped-bg: #cfe3ff;
+    --flipped-border: #4a90e2;
+    --flipped-text: #0b2a52;
+
+    --matched-bg: #c8ecd0;
+    --matched-border: #43a05b;
+    --matched-text: #14501f;
+
+    --accent: #2f6fdb;
+    --accent-hover: #2559b5;
+    --accent-text: #ffffff;
+
+    --input-bg: #ffffff;
+    --input-border: #b9c1d3;
+
+    --turn: #1b7f3b;
+    --error: #a15c00;
+
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+@media (prefers-color-scheme: dark) {
+    .memory-page {
+        --bg: #14171f;
+        --text: #eef1f7;
+        --muted: #b8c0d0;
+
+        --cell-bg: #1e2330;
+        --cell-border: #3a4256;
+        --cell-text: #f5f5f5;
+        --cell-hover: #2a3144;
+
+        --flipped-bg: #37474f;
+        --flipped-border: #607d8b;
+        --flipped-text: #ffffff;
+
+        --matched-bg: #2e7d32;
+        --matched-border: #4caf50;
+        --matched-text: #ffffff;
+
+        --accent: #4a9eff;
+        --accent-hover: #3a8ae5;
+        --accent-text: #0b1220;
+
+        --input-bg: #1e2330;
+        --input-border: #3a4256;
+
+        --turn: #6fdc8c;
+        --error: #ffd23f;
+    }
+}
+
+
+
 .memory-container {
     text-align: center;
 }
 
-.memory-container p,
-.memory-container h2,
-.memory-container h3 {
-    color: #f5f5f5;
+.memory-page h1,
+.memory-page h2,
+.memory-page h3,
+.memory-page p {
+    color: var(--text);
 }
 
-/* Buttons: same blue as the "New Game" button in memory.css */
+.memory-page #result {
+    color: var(--text);
+}
+
+
+.memory-page .cell {
+    background-color: var(--cell-bg);
+    color: var(--cell-text);
+    border-color: var(--cell-border);
+}
+
+.memory-page .cell:hover:not(:disabled) {
+    background-color: var(--cell-hover);
+}
+
+.memory-page .cell.flipped {
+    background-color: var(--flipped-bg);
+    border-color: var(--flipped-border);
+    color: var(--flipped-text);
+}
+
+.memory-page .cell.matched {
+    background-color: var(--matched-bg);
+    border-color: var(--matched-border);
+    color: var(--matched-text);
+}
+
+.memory-page .cell:disabled:not(.matched):not(.flipped) {
+    opacity: 0.55;
+}
+
+
 .mp-button {
     padding: 12px 28px;
 
     border: none;
     border-radius: 8px;
 
-    background-color: #4a9eff;
-    color: white;
+    background-color: var(--accent);
+    color: var(--accent-text);
 
     font-size: 1.1rem;
     font-weight: bold;
@@ -27,14 +127,13 @@
 }
 
 .mp-button:hover {
-    background-color: #3a8ae5;
+    background-color: var(--accent-hover);
 }
 
 .mp-or {
     margin: 20px 0 10px;
 }
 
-/* Room code input + Join button side by side */
 .join-row {
     display: flex;
     justify-content: center;
@@ -45,7 +144,10 @@
     width: 140px;
     padding: 10px;
 
-    border: 2px solid #444;
+    background-color: var(--input-bg);
+    color: var(--text);
+
+    border: 2px solid var(--input-border);
     border-radius: 8px;
 
     text-align: center;
@@ -54,25 +156,27 @@
     text-transform: uppercase;
 }
 
-/* Big room code on the waiting screen */
+#code-input::placeholder {
+    color: var(--muted);
+    letter-spacing: 2px;
+}
+
+#code-input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 #room-code {
     font-size: 3rem;
     letter-spacing: 12px;
 }
 
-/* "Your turn" / "Opponent's turn" */
-#turn-indicator {
+.memory-page #turn-indicator {
     min-height: 1.4em;
     font-size: 1.4rem;
-    color: #4caf50;
+    color: var(--turn);
 }
 
-/* Face-down cards look dimmed when you can't click them (opponent's turn) */
-.cell:disabled:not(.matched):not(.flipped) {
-    opacity: 0.6;
-}
-
-/* Restart controls */
 #restart-button {
     margin-top: 10px;
 }
@@ -85,9 +189,19 @@
     margin: 0 5px;
 }
 
-/* Error messages */
-.mp-error {
+.memory-page .mp-error {
     min-height: 1.4em;
-    color: #ffd23f;
+    color: var(--error);
     font-weight: bold;
+}
+
+
+.memory-page .home-button {
+    color: var(--muted);
+    border-color: var(--cell-border);
+}
+
+.memory-page .home-button:hover {
+    background-color: var(--cell-hover);
+    color: var(--text);
 }

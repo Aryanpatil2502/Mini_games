@@ -1,0 +1,241 @@
+/* =========================================================
+   Tic Tac Toe multiplayer
+   Theme variables live on the page (body) class, not the
+   container, so the page background, container and controls
+   always switch light/dark together.
+   ========================================================= */
+
+.tictactoe-page {
+    color-scheme: light dark;
+
+    --ttt-bg: #f4f5f7;
+    --ttt-text: #1a1a1a;
+    --ttt-muted: #4a5060;
+    --ttt-border: #b8bdc7;
+    --ttt-btn-bg: #e4e7ec;
+    --ttt-btn-hover: #d3d8e0;
+    --ttt-input-bg: #ffffff;
+    --ttt-cell-bg: #ffffff;
+    --ttt-cell-hover: #e6ebf5;
+    --ttt-cell-disabled: #eceef2;
+    --ttt-panel-bg: #ffffff;
+    --ttt-error: #c62828;
+    --ttt-accent: #2563eb;
+
+    margin: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+    background-color: var(--ttt-bg);
+    color: var(--ttt-text);
+}
+
+@media (prefers-color-scheme: dark) {
+    .tictactoe-page {
+        --ttt-bg: #1b1d21;
+        --ttt-text: #f0f0f0;
+        --ttt-muted: #b8bdc7;
+        --ttt-border: #555a63;
+        --ttt-btn-bg: #33363d;
+        --ttt-btn-hover: #444852;
+        --ttt-input-bg: #2a2c32;
+        --ttt-cell-bg: #2a2c32;
+        --ttt-cell-hover: #3a3d45;
+        --ttt-cell-disabled: #24262b;
+        --ttt-panel-bg: #24262b;
+        --ttt-error: #ff6b6b;
+        --ttt-accent: #6ea8ff;
+    }
+}
+
+
+/* =========================
+   CONTAINER
+   (transparent, so it never shows as a box on the page)
+   ========================= */
+
+.ttt-container {
+    width: 100%;
+    max-width: 520px;
+    padding: 0 16px;
+    box-sizing: border-box;
+    text-align: center;
+    background: none;
+    color: var(--ttt-text);
+}
+
+/* Keep the lobby / waiting / game sections toggling via [hidden] */
+.ttt-container [hidden] {
+    display: none !important;
+}
+
+
+/* =========================
+   TEXT
+   ========================= */
+
+.ttt-container h1,
+.ttt-container h2,
+.ttt-container h3,
+.ttt-container p {
+    color: var(--ttt-text);
+}
+
+/* The ID selectors in tictactoe.css (#result) would otherwise win */
+.ttt-container #result,
+.ttt-container #round-result {
+    color: var(--ttt-text);
+    font-weight: 600;
+    margin-top: 12px;
+}
+
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.ttt-container .mp-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+
+    color: var(--ttt-text);
+    background: var(--ttt-btn-bg);
+
+    border: 1px solid var(--ttt-border);
+    border-radius: 8px;
+
+    transition: background 0.15s;
+}
+
+.ttt-container .mp-button:hover {
+    background: var(--ttt-btn-hover);
+}
+
+.ttt-container .mp-button:focus-visible,
+.ttt-container .cell:focus-visible,
+.ttt-container .home-button:focus-visible {
+    outline: 2px solid var(--ttt-accent);
+    outline-offset: 2px;
+}
+
+
+/* =========================
+   LOBBY: JOIN ROOM
+   ========================= */
+
+.ttt-container .mp-or {
+    margin: 16px 0 10px;
+}
+
+.ttt-container .join-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ttt-container .join-row input {
+    width: 110px;
+    padding: 10px;
+    box-sizing: border-box;
+
+    font-size: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+
+    color: var(--ttt-text);
+    background: var(--ttt-input-bg);
+
+    border: 1px solid var(--ttt-border);
+    border-radius: 8px;
+}
+
+.ttt-container .join-row input::placeholder {
+    color: var(--ttt-text);
+    opacity: 0.5;
+}
+
+.ttt-container .join-row input:focus-visible {
+    outline: 2px solid var(--ttt-accent);
+    outline-offset: 2px;
+}
+
+
+/* =========================
+   WAITING: ROOM CODE
+   ========================= */
+
+.ttt-container #room-code {
+    letter-spacing: 6px;
+    color: var(--ttt-accent);
+}
+
+
+/* =========================
+   BOARD CELLS
+   (override the dark-only colors from tictactoe.css)
+   ========================= */
+
+.ttt-container .cell {
+    color: var(--ttt-text);
+    background: var(--ttt-cell-bg);
+    border: 1px solid var(--ttt-border);
+}
+
+.ttt-container .cell:hover:not(:disabled) {
+    background: var(--ttt-cell-hover);
+    cursor: pointer;
+}
+
+.ttt-container .cell:disabled {
+    background: var(--ttt-cell-disabled);
+    color: var(--ttt-text);
+    opacity: 1;
+    cursor: not-allowed;
+}
+
+
+/* =========================
+   RESTART REQUEST
+   ========================= */
+
+.ttt-container #restart-request {
+    margin-top: 12px;
+    padding: 12px;
+
+    color: var(--ttt-text);
+    background: var(--ttt-panel-bg);
+
+    border: 1px solid var(--ttt-border);
+    border-radius: 8px;
+}
+
+.ttt-container #restart-request .mp-button {
+    margin: 0 4px;
+}
+
+
+/* =========================
+   ERROR
+   ========================= */
+
+.ttt-container .mp-error {
+    color: var(--ttt-error);
+    min-height: 1.2em;
+}
+
+
+/* =========================
+   BACK TO HOME
+   (single-player styles use fixed light-grey text)
+   ========================= */
+
+.ttt-container .home-button {
+    color: var(--ttt-muted);
+    border-color: var(--ttt-border);
+}
+
+.ttt-container .home-button:hover {
+    background-color: var(--ttt-cell-hover);
+    color: var(--ttt-text);
+}

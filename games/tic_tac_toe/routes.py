@@ -135,3 +135,11 @@ def play_tictactoe():
         "winner": game["winner"],
         "status": status
     })
+
+@tictactoe_bp.route("/tictactoe/multiplayer")
+def tictactoe_multiplayer_page():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("games/ttt_multiplayer.html")
