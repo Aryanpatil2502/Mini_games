@@ -1,10 +1,3 @@
-/* =========================================================
-   Tic Tac Toe multiplayer
-   Theme variables live on the page (body) class, not the
-   container, so the page background, container and controls
-   always switch light/dark together.
-   ========================================================= */
-
 .tictactoe-page {
     color-scheme: light dark;
 
@@ -47,12 +40,6 @@
     }
 }
 
-
-/* =========================
-   CONTAINER
-   (transparent, so it never shows as a box on the page)
-   ========================= */
-
 .ttt-container {
     width: 100%;
     max-width: 520px;
@@ -63,15 +50,11 @@
     color: var(--ttt-text);
 }
 
-/* Keep the lobby / waiting / game sections toggling via [hidden] */
 .ttt-container [hidden] {
     display: none !important;
 }
 
 
-/* =========================
-   TEXT
-   ========================= */
 
 .ttt-container h1,
 .ttt-container h2,
@@ -80,7 +63,6 @@
     color: var(--ttt-text);
 }
 
-/* The ID selectors in tictactoe.css (#result) would otherwise win */
 .ttt-container #result,
 .ttt-container #round-result {
     color: var(--ttt-text);
@@ -88,10 +70,6 @@
     margin-top: 12px;
 }
 
-
-/* =========================
-   BUTTONS
-   ========================= */
 
 .ttt-container .mp-button {
     padding: 10px 20px;
@@ -117,11 +95,6 @@
     outline: 2px solid var(--ttt-accent);
     outline-offset: 2px;
 }
-
-
-/* =========================
-   LOBBY: JOIN ROOM
-   ========================= */
 
 .ttt-container .mp-or {
     margin: 16px 0 10px;
@@ -161,20 +134,11 @@
 }
 
 
-/* =========================
-   WAITING: ROOM CODE
-   ========================= */
-
 .ttt-container #room-code {
     letter-spacing: 6px;
     color: var(--ttt-accent);
 }
 
-
-/* =========================
-   BOARD CELLS
-   (override the dark-only colors from tictactoe.css)
-   ========================= */
 
 .ttt-container .cell {
     color: var(--ttt-text);
@@ -194,11 +158,6 @@
     cursor: not-allowed;
 }
 
-
-/* =========================
-   RESTART REQUEST
-   ========================= */
-
 .ttt-container #restart-request {
     margin-top: 12px;
     padding: 12px;
@@ -215,20 +174,11 @@
 }
 
 
-/* =========================
-   ERROR
-   ========================= */
-
 .ttt-container .mp-error {
     color: var(--ttt-error);
     min-height: 1.2em;
 }
 
-
-/* =========================
-   BACK TO HOME
-   (single-player styles use fixed light-grey text)
-   ========================= */
 
 .ttt-container .home-button {
     color: var(--ttt-muted);
