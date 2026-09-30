@@ -158,3 +158,11 @@ def play_hangman():
         "lost": lost,
         "word": game["word"]
     })
+
+@hangman_bp.route("/hangman/multiplayer")
+def hangman_multiplayer_page():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("games/hangman_multiplayer.html")

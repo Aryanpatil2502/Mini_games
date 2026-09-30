@@ -25,10 +25,10 @@ mode-page
     </div>
 
     <div class="game-box">
-        <div class="game-card disabled" aria-disabled="true">
+        <a href="{{ url_for('hangman.hangman_multiplayer_page') }}" class="game-card">
             <img src="{{ url_for('static', filename='assets/hangman.jpg') }}" alt="Hangman">
-            <span>Coming soon</span>
-        </div>
+            <span>Hangman</span>
+        </a>
     </div>
 
     <div class="game-box">
