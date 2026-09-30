@@ -8,7 +8,7 @@ def load_words():
     with open(WORDS_FILE) as f:
         return [line.strip().lower() for line in f if line.strip()]
 
-words = load_words()
+words = list(set(load_words()))
 
 def new_hangman_game():
 

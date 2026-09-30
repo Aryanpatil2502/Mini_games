@@ -3,6 +3,22 @@
     color: white;
 }
 
+.rps-container h3#versus {
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+.rps-container h2#score {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.rps-container h3#result {
+    font-size: 1.6rem;
+    font-weight: bold;
+    min-height: 1.6em;
+}
+
 .mp-button {
     padding: 12px 28px;
 
@@ -12,7 +28,7 @@
     background-color: #337ab7;
     color: white;
 
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
 }
@@ -23,6 +39,7 @@
 
 .mp-or {
     margin: 20px 0 10px;
+    font-size: 1.1rem;
 }
 
 .join-row {
@@ -50,6 +67,13 @@
     color: white;
 }
 
+/* Highlight your own choice once picked */
+.choice-button.selected {
+    outline: 4px solid #ffd23f;
+    transform: translateY(-8px);
+    background-color: #444;
+}
+
 .choice-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -60,4 +84,5 @@
     min-height: 1.4em;
     color: #ffd23f;
     font-weight: bold;
+    font-size: 1.1rem;
 }

@@ -18,7 +18,7 @@ mode-page
 <div class="game-container">
 
     <div class="game-box">
-        <a href="/rps/multiplayer" class="game-card">
+        <a href="{{ url_for('rps.rps_multiplayer_page') }}" class="game-card">
             <img src="{{ url_for('static', filename='assets/RPS.png') }}" alt="Rock Paper Scissors">
             <span>Rock Paper Scissors</span>
         </a>

@@ -1,3 +1,9 @@
+const EMOJI = {
+    rock: "🪨",
+    paper: "📄",
+    scissors: "✂️"
+};
+
 async function playGame(choice) {
 
     const response = await fetch("/api/rps", {
@@ -15,10 +21,10 @@ async function playGame(choice) {
     const data = await response.json();
 
     document.getElementById("result").textContent =
-        `You chose ${data.player}. Computer chose ${data.computer}. ${data.result}`;
+        `You chose ${EMOJI[data.player]} ${data.player}. Computer chose ${EMOJI[data.computer]} ${data.computer}. ${data.result}`;
 
     document.getElementById("score").textContent =
-    `Player: ${data.player_score} | Computer: ${data.computer_score}`;
+        `Player: ${data.player_score} | Computer: ${data.computer_score}`;
 }
 
 function resetGame() {
@@ -34,5 +40,3 @@ function resetGame() {
         document.getElementById("result").textContent = "";
     });
 }
-
-
