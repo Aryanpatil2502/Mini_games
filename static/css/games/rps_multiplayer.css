@@ -67,7 +67,6 @@
     color: white;
 }
 
-/* Highlight your own choice once picked */
 .choice-button.selected {
     outline: 4px solid #ffd23f;
     transform: translateY(-8px);
