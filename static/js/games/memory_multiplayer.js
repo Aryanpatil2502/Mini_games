@@ -21,6 +21,8 @@ const restartRequestText = document.getElementById("restart-request-text");
 const acceptRestartButton = document.getElementById("accept-restart-button");
 const declineRestartButton = document.getElementById("decline-restart-button");
 
+const NEW_GAME_DELAY = 1800;
+
 
 let currentCode = null;
 let opponentName = null;
@@ -29,13 +31,22 @@ let cards = [];
 let flipped = [];
 let lastWins = {};
 let matchOver = false;
-
+let locked = false;
+let newGameTimer = null;
 
 
 function show(section) {
     lobby.hidden = section !== "lobby";
     waiting.hidden = section !== "waiting";
     game.hidden = section !== "game";
+}
+
+function cancelNewGameTimer() {
+    if (newGameTimer !== null) {
+        clearTimeout(newGameTimer);
+        newGameTimer = null;
+    }
+    locked = false;
 }
 
 function renderBoard() {
@@ -61,14 +72,14 @@ function renderBoard() {
 
         } else {
             cell.textContent = "";
-            cell.disabled = !myTurn || flipped.length >= 2 || matchOver;
+            cell.disabled = !myTurn || flipped.length >= 2 || matchOver || locked;
         }
     });
 }
 
 function updateTurn() {
 
-    if (matchOver) {
+    if (matchOver || locked) {
         turnEl.textContent = "";
         return;
     }
@@ -88,8 +99,6 @@ function updateScores(pairs, wins) {
     gameWinsEl.textContent =
         `Games won - ${myName}: ${wins[myName] || 0} | ${opponentName}: ${wins[opponentName] || 0}`;
 }
-
-
 
 document.getElementById("create-room-button").addEventListener("click", function() {
     errorEl.textContent = "";
@@ -123,7 +132,7 @@ cells.forEach(function(cell) {
 
     cell.addEventListener("click", function() {
 
-        if (matchOver) {
+        if (matchOver || locked) {
             return;
         }
 
@@ -157,6 +166,8 @@ socket.on("memory_joined", function(data) {
 });
 
 socket.on("memory_match_ready", function(data) {
+
+    cancelNewGameTimer();
 
     opponentName = data.players.find(function(name) {
         return name !== myName;
@@ -212,7 +223,9 @@ socket.on("memory_flip_result", function(data) {
             resultEl.textContent =
                 gameOutcome + (iWonMatch ? " You won the match!" : " " + opponentName + " won the match.");
         } else {
-            resultEl.textContent = gameOutcome + " A new game has started!";
+            resultEl.textContent = gameOutcome + " Next game starting...";
+
+            locked = true;
         }
 
     } else if (flipped.length === 2) {
@@ -234,8 +247,32 @@ socket.on("memory_flip_result", function(data) {
     }
 });
 
+socket.on("memory_new_game", function(data) {
+
+    if (newGameTimer !== null) {
+        clearTimeout(newGameTimer);
+    }
+
+    newGameTimer = setTimeout(function() {
+
+        newGameTimer = null;
+        locked = false;
+
+        cards = data.cards;
+        flipped = [];
+        currentTurn = data.current_turn;
+
+        resultEl.textContent = "";
+
+        updateTurn();
+        renderBoard();
+
+    }, NEW_GAME_DELAY);
+});
 
 socket.on("memory_opponent_left", function(data) {
+
+    cancelNewGameTimer();
 
     matchOver = true;
 

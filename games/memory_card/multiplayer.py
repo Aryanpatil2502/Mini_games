@@ -6,7 +6,7 @@ from flask_socketio import emit, join_room as socketio_join_room
 from .logic import new_memory_game
 
 rooms = {}
-sid_to_room = {}  # socket id -> room code, used to know which room to close on disconnect
+sid_to_room = {}
 
 WINS_NEEDED = 5
 
@@ -14,8 +14,9 @@ WINS_NEEDED = 5
 def generate_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
 
+
 def flip_card(cards, flipped, index):
-   
+
     if cards[index]["matched"]:
         return cards, flipped, False
 
@@ -55,7 +56,13 @@ def _other_player(room, username):
 
 
 def _finish_game(room):
+    """
+    Called when all 8 pairs have been found in the current game.
+    Awards a game-win (or draw). Does NOT reset the board, so the
+    finished board can still be sent to the players first.
 
+    Returns True if the whole match just ended, False otherwise.
+    """
 
     players = room["players"]
     p1, p2 = players[0], players[1]
@@ -67,15 +74,14 @@ def _finish_game(room):
         room["wins"][p1] += 1
     elif pairs2 > pairs1:
         room["wins"][p2] += 1
+    # else: tie, no one gets a point
 
-    if max(room["wins"].values()) >= WINS_NEEDED:
+    match_over = max(room["wins"].values()) >= WINS_NEEDED
+
+    if match_over:
         room["closed"] = True
-        return True
 
-    room["starting_player_index"] = 1 - room["starting_player_index"]
-    start_new_game(room)
-
-    return False
+    return match_over
 
 
 def register_memory_multiplayer(socketio):
@@ -127,7 +133,6 @@ def register_memory_multiplayer(socketio):
 
         username = session.get("username", "Unknown")
 
-        # Reconnecting as a player already in the room (e.g. page refresh)
         if username in room["players"]:
             socketio_join_room(code)
             sid_to_room[request.sid] = code
@@ -197,6 +202,9 @@ def register_memory_multiplayer(socketio):
         if len(room["flipped"]) == 2:
             return
 
+        if not isinstance(index, int) or isinstance(index, bool) or not 0 <= index <= 15:
+            return
+
         cards, flipped, matched_pair = flip_card(
             room["cards"], room["flipped"], index
         )
@@ -216,6 +224,7 @@ def register_memory_multiplayer(socketio):
                 game_over = True
                 match_over = _finish_game(room)
 
+            # Match: same player continues - current_turn unchanged
 
         emit('memory_flip_result', {
             "cards": room["cards"],
@@ -226,6 +235,16 @@ def register_memory_multiplayer(socketio):
             "game_over": game_over,
             "match_over": match_over
         }, room=code)
+
+        if game_over and not match_over:
+            room["starting_player_index"] = 1 - room["starting_player_index"]
+            start_new_game(room)
+
+            emit('memory_new_game', {
+                "cards": room["cards"],
+                "current_turn": room["current_turn"],
+                "pairs_found": room["pairs_found"]
+            }, room=code)
 
 
     @socketio.on('memory_resolve_mismatch')
@@ -249,7 +268,6 @@ def register_memory_multiplayer(socketio):
         if username not in room["players"]:
             return
 
-        # Nothing to resolve
         if len(room["flipped"]) != 2:
             return
 

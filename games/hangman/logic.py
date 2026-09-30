@@ -1,17 +1,14 @@
 import random
+import os
+
+WORDS_FILE = os.path.join(os.path.dirname(__file__), "words.txt")
 
 
-    # List of words to choose from
-words = [
-    "apple","banana","orange","guitar","piano",
-    "rocket","planet","castle","forest","mountain","river","ocean","island","bridge","school",
-    "college","teacher","student","computer","keyboard","internet","program","python",
-    "javascript","developer","database",
-    "algorithm","function","variable","software","hardware","football","cricket","basketball",
-    "player","champion","elephant","tiger",
-    "lion","giraffe","monkey","penguin","dolphin","rabbit","camera","bicycle","airplane",
-    "submarine","hospital", "library"
-]
+def load_words():
+    with open(WORDS_FILE) as f:
+        return [line.strip().lower() for line in f if line.strip()]
+
+words = load_words()
 
 def new_hangman_game():
 
