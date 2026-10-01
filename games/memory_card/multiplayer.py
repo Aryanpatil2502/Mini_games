@@ -3,7 +3,7 @@ import string
 from flask import session, request
 from flask_socketio import emit, join_room as socketio_join_room
 
-from .logic import new_memory_game
+from .logic import new_memory_game, public_cards
 
 rooms = {}
 sid_to_room = {}
@@ -56,13 +56,6 @@ def _other_player(room, username):
 
 
 def _finish_game(room):
-    """
-    Called when all 8 pairs have been found in the current game.
-    Awards a game-win (or draw). Does NOT reset the board, so the
-    finished board can still be sent to the players first.
-
-    Returns True if the whole match just ended, False otherwise.
-    """
 
     players = room["players"]
     p1, p2 = players[0], players[1]
@@ -74,8 +67,7 @@ def _finish_game(room):
         room["wins"][p1] += 1
     elif pairs2 > pairs1:
         room["wins"][p2] += 1
-    # else: tie, no one gets a point
-
+        
     match_over = max(room["wins"].values()) >= WINS_NEEDED
 
     if match_over:
@@ -144,7 +136,7 @@ def register_memory_multiplayer(socketio):
                     "players": room["players"],
                     "wins": room["wins"],
                     "wins_needed": WINS_NEEDED,
-                    "cards": room["cards"],
+                    "cards": public_cards(room["cards"], room["flipped"]),
                     "current_turn": room["current_turn"]
                 })
             return
@@ -169,7 +161,7 @@ def register_memory_multiplayer(socketio):
                 "players": room["players"],
                 "wins": room["wins"],
                 "wins_needed": WINS_NEEDED,
-                "cards": room["cards"],
+                "cards": public_cards(room["cards"], room["flipped"]),
                 "current_turn": room["current_turn"]
             }, room=code)
 
@@ -224,10 +216,8 @@ def register_memory_multiplayer(socketio):
                 game_over = True
                 match_over = _finish_game(room)
 
-            # Match: same player continues - current_turn unchanged
-
         emit('memory_flip_result', {
-            "cards": room["cards"],
+            "cards": public_cards(room["cards"], room["flipped"]),
             "flipped": room["flipped"],
             "current_turn": room["current_turn"],
             "pairs_found": room["pairs_found"],
@@ -241,7 +231,7 @@ def register_memory_multiplayer(socketio):
             start_new_game(room)
 
             emit('memory_new_game', {
-                "cards": room["cards"],
+                "cards": public_cards(room["cards"], room["flipped"]),
                 "current_turn": room["current_turn"],
                 "pairs_found": room["pairs_found"]
             }, room=code)
@@ -268,6 +258,9 @@ def register_memory_multiplayer(socketio):
         if username not in room["players"]:
             return
 
+        if room["current_turn"] != username:
+            return
+
         if len(room["flipped"]) != 2:
             return
 
@@ -276,7 +269,7 @@ def register_memory_multiplayer(socketio):
         room["current_turn"] = _other_player(room, room["current_turn"])
 
         emit('memory_flip_result', {
-            "cards": room["cards"],
+            "cards": public_cards(room["cards"], room["flipped"]),
             "flipped": room["flipped"],
             "current_turn": room["current_turn"],
             "pairs_found": room["pairs_found"],
@@ -370,6 +363,6 @@ def register_memory_multiplayer(socketio):
             "players": room["players"],
             "wins": room["wins"],
             "wins_needed": WINS_NEEDED,
-            "cards": room["cards"],
+            "cards": public_cards(room["cards"], room["flipped"]),
             "current_turn": room["current_turn"]
         }, room=code)

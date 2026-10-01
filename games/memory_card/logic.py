@@ -22,6 +22,12 @@ def new_memory_game():
 
 def play(game, index):
 
+    if not isinstance(index, int) or isinstance(index, bool) or not 0 <= index < 16:
+        return game
+
+    if len(game["flipped"]) >= 2:
+        return game
+
     if game["cards"][index]["matched"]:
         return game
 
@@ -52,3 +58,13 @@ def play(game, index):
 def resolve_mismatch(game):
     game["flipped"] = []
     return game
+
+
+def public_cards(cards, flipped):
+    result = []
+    for i, card in enumerate(cards):
+        if card["matched"] or i in flipped:
+            result.append({"value": card["value"], "matched": card["matched"]})
+        else:
+            result.append({"value": None, "matched": False})
+    return result

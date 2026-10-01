@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 
-from .logic import new_memory_game, play, resolve_mismatch
+from .logic import new_memory_game, play, resolve_mismatch, public_cards
 
 from database import (
     get_memory_game,
@@ -19,6 +19,10 @@ def _game_to_dict(db_game):
         "matched_count": db_game["matched_count"],
         "game_over": bool(db_game["game_over"])
     }
+
+
+def _public(game):
+    return {**game, "cards": public_cards(game["cards"], game["flipped"])}
 
 
 def _save_game(user_id, game, is_new):
@@ -63,9 +67,11 @@ def current_memory():
         return jsonify({"game_exists": False})
 
     game = _game_to_dict(db_game)
-    game["game_exists"] = True
 
-    return jsonify(game)
+    payload = _public(game)
+    payload["game_exists"] = True
+
+    return jsonify(payload)
 
 
 @memory_bp.route("/api/memory/new", methods=["POST"])
@@ -82,9 +88,10 @@ def new_memory():
 
     _save_game(user_id, game, is_new=(existing_game is None))
 
-    game["game_exists"] = True
+    payload = _public(game)
+    payload["game_exists"] = True
 
-    return jsonify(game)
+    return jsonify(payload)
 
 
 @memory_bp.route("/api/memory/play", methods=["POST"])
@@ -109,7 +116,8 @@ def play_memory():
 
     _save_game(user_id, game, is_new=False)
 
-    return jsonify(game)
+    return jsonify(_public(game))
+
 
 @memory_bp.route("/api/memory/resolve", methods=["POST"])
 def resolve_memory():
@@ -130,7 +138,8 @@ def resolve_memory():
 
     _save_game(user_id, game, is_new=False)
 
-    return jsonify(game)
+    return jsonify(_public(game))
+
 
 @memory_bp.route("/memory/multiplayer")
 def memory_multiplayer_page():
