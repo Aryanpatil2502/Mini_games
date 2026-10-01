@@ -143,3 +143,4 @@ def tictactoe_multiplayer_page():
         return redirect(url_for("login"))
 
     return render_template("games/ttt_multiplayer.html")
+

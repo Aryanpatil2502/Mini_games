@@ -32,7 +32,7 @@ def _other_player(room, username):
 
 
 def _symbols(room):
-    # The starting player is X, and the starter alternates every game
+   
     starter = room["players"][room["starting_player_index"]]
     other = _other_player(room, starter)
     return {starter: "X", other: "O"}
@@ -50,12 +50,6 @@ def _match_ready_payload(room):
 
 
 def _finish_game(room):
-    """
-    Called when a single game ends (win or draw).
-    Updates the win counts and returns (winner_username, match_over).
-    Does NOT reset the board, so the final position can still be sent
-    to the players.
-    """
 
     winner_username = None
 
@@ -311,7 +305,6 @@ def register_tictactoe_multiplayer(socketio):
         if username not in room["players"]:
             return
 
-        # Only the opponent of whoever asked can answer, and only if a request exists
         if room["restart_from"] is None or room["restart_from"] == username:
             return
 

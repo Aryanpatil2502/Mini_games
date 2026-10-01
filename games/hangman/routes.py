@@ -106,8 +106,18 @@ def play_hangman():
 
     user_id = session["user_id"]
 
-    data = request.get_json()
-    letter = data["guess"]
+    data = request.get_json(silent=True) or {}
+    letter = data.get("guess")
+
+    if (
+        not isinstance(letter, str)
+        or len(letter) != 1
+        or not letter.isascii()
+        or not letter.isalpha()
+    ):
+        return jsonify({"error": "Invalid guess"}), 400
+
+    letter = letter.lower()
 
     db_game = get_hangman_game(user_id)
 
@@ -122,8 +132,9 @@ def play_hangman():
         "incorrect_guesses": db_game["incorrect_guesses"],
         "max_incorrect_guesses": db_game["max_incorrect_guesses"]
     }
-
-    game = guess_letter(game, letter)
+    
+    if db_game["status"] == "playing":
+        game = guess_letter(game, letter)
 
     display_word = get_display_word(game)
 
@@ -156,7 +167,7 @@ def play_hangman():
         "max_incorrect_guesses": game["max_incorrect_guesses"],
         "won": won,
         "lost": lost,
-        "word": game["word"]
+        "word": game["word"] if (won or lost) else ""
     })
 
 @hangman_bp.route("/hangman/multiplayer")
